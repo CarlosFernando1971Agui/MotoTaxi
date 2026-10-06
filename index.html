@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Configuración PWA para instalar como App nativa -->
-<link rel="manifest" href="data:application/manifest+json;utf8,{%22short_name%22:%22MotoTaxi%22,%22name%22:%22MotoTaxi%20Express%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/171/171255.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22}],%22start_url%22:%22.%22,%22background_color%22:%22%23f57c00%22,%22theme_color%22:%22%23f57c00%22,%22display%22:%22standalone%22}">
-<meta name="theme-color" content="#f57c00">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="appTitle">MotoTaxi Express - Sistema Integral</title>
+
+  <!-- CONFIGURACIÓN PWA PARA GENERAR APK -->
+  <link rel="manifest" href="data:application/manifest+json;utf8,{%22short_name%22:%22MotoTaxi%22,%22name%22:%22MotoTaxi%20Express%22,%22description%22:%22Sistema%20Integral%20de%20MotoTaxi%20y%20Despacho%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/171/171255.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22,%22purpose%22:%22any%20maskable%22}],%22start_url%22:%22.%22,%22background_color%22:%22%23f57c00%22,%22theme_color%22:%22%23f57c00%22,%22display%22:%22standalone%22}">
+  <meta name="theme-color" content="#f57c00">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <style>
     :root {
       --primary: #f57c00;
@@ -646,7 +648,7 @@
         return;
       }
 
-      if (confirm("⚠️ ¡ATENCIÓN! Se exportarán todas las carreras a Excel y luego SE BORRARÁN PERMANENTEMENTE de la base de datos. ¿Deseas continuar?")) {
+      if (confirm("⚠️️ ¡ATENCIÓN! Se exportarán todas las carreras a Excel y luego SE BORRARÁN PERMANENTEMENTE de la base de datos. ¿Deseas continuar?")) {
         const exportado = exportarCarrerasExcel();
         if (exportado) {
           db.ref('carreras').remove().then(() => {
@@ -811,7 +813,7 @@
       const btn = document.getElementById(origen === 'user' ? 'btnGrabadorUser' : 'btnGrabadorCentral');
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop();
-        btn.innerText = "🎙️ Grabar Audio";
+        btn.innerText = "🎙️️ Grabar Audio";
         btn.style.background = "#0288d1";
       } else {
         try {
@@ -841,7 +843,6 @@
       }
     }
 
-    // LANZAR CARRERA
     function lanzarCarrera(origen) {
       let cliente, ubicacion, destino;
 
@@ -860,7 +861,6 @@
         return;
       }
 
-      // Si viene de usuario entra a 'pendiente_central', si la lanza central directamente pasa a 'pendiente'
       const estadoInicial = (origen === 'user') ? 'pendiente_central' : 'pendiente';
 
       const nuevaCarrera = {
@@ -892,7 +892,6 @@
       });
     }
 
-    // FUNCIÓN DE CENTRAL PARA CONVOCAR PEDIDO DE USUARIO
     function convocarCarreraCentral(id) {
       db.ref('carreras/' + id).update({
         estado: 'pendiente'
@@ -924,7 +923,6 @@
       }
     }
 
-    // RENDERIZAR VISTA PASAJERO
     function renderizarCarrerasUsuario() {
       const cont = document.getElementById('listaMisCarrerasUser');
       if (!cont) return;
@@ -983,7 +981,6 @@
       }
     }
 
-    // MONITOREO CENTRAL
     function escucharCarrerasCentral() {
       db.ref('carreras').on('value', snapshot => {
         const data = snapshot.val() || {};
@@ -1047,7 +1044,6 @@
       });
     }
 
-    // MONITOREO MOTOTAXI
     function escucharCarrerasDriver() {
       db.ref('carreras').on('value', snapshot => {
         const data = snapshot.val() || {};
@@ -1058,7 +1054,6 @@
           const item = data[id];
           const esMiCarrera = item.chofer && mototaxiSesion && item.chofer.placa === mototaxiSesion.placa;
 
-          // Solo ven carreras convocadas ('pendiente'), pospuestas o sus propias carreras tomadas
           if (item.estado === 'pendiente' || item.estado === 'pospuesta' || (item.estado === 'tomada' && esMiCarrera)) {
             cont.innerHTML += `
               <div class="item-carrera ${esMiCarrera ? 'asignada' : (item.estado === 'pospuesta' ? 'pospuesta' : '')}">
