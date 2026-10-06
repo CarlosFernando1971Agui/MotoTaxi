@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="appTitle">MotoTaxi Express - Sistema Integral</title>
+  <style>
+    :root {
+      --primary: #f57c00;
+      --primary-dark: #e65100;
+      --bg: #eceff1;
+      --card-bg: #ffffff;
+      --text: #263238;
+      --success: #2e7d32;
+      --danger: #c62828;
+      --info: #0288d1;
+      --warning: #fbc02d;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 0.8rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .header-info h1 { margin: 0; font-size: 1.1rem; }
+    .header-info p { margin: 0.2rem 0 0 0; font-size: 0.75rem; opacity: 0.9; }
+
+    .role-badge {
+      background: white;
+      color: var(--primary-dark);
+      padding: 0.3rem 0.6rem;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      padding: 1rem;
+      padding-bottom: 80px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+      color: var(--primary-dark);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 0.3rem;
+    }
+
+    .form-group { margin-bottom: 0.8rem; }
+    label { display: block; margin-bottom: 0.2rem; font-weight: 600; font-size: 0.85rem; }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .btn-convocar {
+      background-color: #673ab7;
+      color: white;
+      border: none;
+      padding: 0.6rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .btn-audio {
+      background-color: var(--info);
+      color: white;
+      border: none;
+      font-weight: bold;
+      padding: 0.65rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-mantenimiento {
+      background-color: var(--warning);
+      color: #333;
+      font-weight: bold;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-excel {
+      background-color: #2e7d32;
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .btn-vaciar {
+      background-color: var(--danger);
+      color: white;
+      font-weight: bold;
+      border: none;
+      padding: 0.7rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+
+    .btn-aceptar {
+      background-color: var(--success);
+      color: white;
+      border: none;
+      padding: 0.6rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .btn-cancelar {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .btn-posponer {
+      background-color: #f57c00;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .btn-completar {
+      background-color: #2196f3;
+      color: white;
+      border: none;
+      padding: 0.5rem;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 0.4rem;
+    }
+
+    .nav-admin-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .mototaxi-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      padding: 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 0.6rem;
+    }
+
+    .mototaxi-img {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--primary);
+    }
+
+    .mototaxi-info { flex: 1; }
+    .mototaxi-info h4 { margin: 0 0 0.2rem 0; font-size: 0.95rem; }
+    .mototaxi-info p { margin: 0; font-size: 0.8rem; color: #555; }
+
+    .item-carrera {
+      background: #fafafa;
+      border-left: 5px solid var(--primary);
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+      border-radius: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .item-carrera.revision {
+      border-left-color: var(--warning);
+      background: #fff8e1;
+    }
+
+    .item-carrera.asignada {
+      border-left-color: var(--info);
+      background: #e3f2fd;
+    }
+
+    .item-carrera.pospuesta {
+      border-left-color: #ff9800;
+      background: #fff3e0;
+    }
+
+    .item-carrera.completada {
+      border-left-color: var(--success);
+      background: #e8f5e9;
+    }
+
+    .item-carrera.cancelada {
+      border-left-color: var(--danger);
+      background: #ffebee;
+    }
+
+    .item-carrera h3 { margin: 0 0 0.4rem 0; font-size: 1rem; }
+    .item-carrera p { margin: 0.2rem 0; font-size: 0.85rem; }
+
+    .chofer-asociado {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+      background: rgba(255,255,255,0.7);
+      padding: 0.4rem;
+      border-radius: 4px;
+    }
+
+    .chofer-asociado img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .acciones-grid { display: flex; gap: 0.5rem; }
+    .audio-player { margin: 0.5rem 0; width: 100%; }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .modal-box {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+  </style>
+
+  <!-- FIREBASE REALTIME DATABASE -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  
+  <!-- LIBRERÍA EXCEL (SHEETJS CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <!-- MODAL DE MANTENIMIENTO GLOBAL -->
+  <div id="modalMantenimiento" class="modal-overlay" style="display: none;">
+    <div class="modal-box">
+      <h2>🛠️ Aplicación en Mantenimiento</h2>
+      <p>Estamos realizando mejoras en el sistema. Vuelve a intentarlo en unos minutos.</p>
+      <small style="color: #666;">Contacta al Administrador si el problema persiste.</small>
+    </div>
+  </div>
+
+  <!-- MODAL DE SELECCIÓN DE PERFIL -->
+  <div id="modalPerfil" class="modal-overlay">
+    <div class="modal-box">
+      <h2>🛵 Modo de Inicio</h2>
+      <p>Selecciona cómo vas a ingresar:</p>
+      <div class="form-group">
+        <label for="selectRol">Perfil:</label>
+        <select id="selectRol" onchange="toggleInputNombre()">
+          <option value="user">👤 Pasajero / Solicitar MotoTaxi</option>
+          <option value="driver">🛵 Mototaxi Afiliado</option>
+          <option value="central">🏢 Central / Despacho</option>
+          <option value="admin">⚙ Administrador General</option>
+        </select>
+      </div>
+      <div class="form-group" id="groupPassAdmin" style="display: none;">
+        <label for="inputPassAdmin">PIN / Clave de Administrador:</label>
+        <input type="password" id="inputPassAdmin" placeholder="Clave por defecto: 1234">
+      </div>
+      <div class="form-group" id="groupPlacaChofer" style="display: none;">
+        <label for="inputPlacaChofer">Tu Número de Placa o Móvil:</label>
+        <input type="text" id="inputPlacaChofer" placeholder="Ej. 4521-XYZ">
+      </div>
+      <button class="btn" onclick="iniciarSesion()">Ingresar a la App</button>
+    </div>
+  </div>
+
+  <header>
+    <div class="header-info">
+      <h1 id="lblNombreEmpresaHeader">🛵 MotoTaxi Express</h1>
+      <p id="lblSubtituloHeader">📍 Central | 📞 Ref: --</p>
+    </div>
+    <span class="role-badge" id="lblRol">Sin Perfil</span>
+  </header>
+
+  <div class="container">
+
+    <!-- BARRA NAVEGACIÓN RÁPIDA DE ADMINISTRADOR -->
+    <div id="panelNavegacionAdmin" class="card" style="display: none; background: #fff3e0;">
+      <h2>⚙️ Panel Control Administrador</h2>
+      <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Acceso directo a las vistas de la aplicación:</p>
+      <div class="nav-admin-grid">
+        <button class="btn" onclick="cambiarVista('admin')" style="background:#5c6bc0;">📁 Config. & Datos</button>
+        <button class="btn" onclick="cambiarVista('user')" style="background:#0288d1;">👤 Vista Pasajero</button>
+        <button class="btn" onclick="cambiarVista('central')" style="background:#00897b;">🏢 Vista Central</button>
+        <button class="btn" onclick="cambiarVista('driver')" style="background:#fb8c00;">🛵 Vista Conductor</button>
+      </div>
+      <button id="btnToggleMantenimiento" class="btn-mantenimiento" onclick="toggleModoMantenimiento()">
+        ⚙️ Cargar Estado de Mantenimiento...
+      </button>
+    </div>
+
+    <!-- VISTA MÓDULO ADMINISTRATIVO -->
+    <div id="vistaAdminModule" style="display: none;">
+      
+      <!-- CONFIGURACIÓN DE DATOS DE LA EMPRESA -->
+      <div class="card" style="border: 1px solid var(--primary);">
+        <h2>🏬 Datos de la Empresa</h2>
+        <div class="form-group">
+          <label for="cfgNombreEmpresa">Nombre de la Empresa:</label>
+          <input type="text" id="cfgNombreEmpresa" placeholder="Ej. MotoTaxi Express Vallegrande">
+        </div>
+        <div class="form-group">
+          <label for="cfgDireccion">Dirección / Ubicación Central:</label>
+          <input type="text" id="cfgDireccion" placeholder="Ej. Av. Principal esquina Calle Bolivar">
+        </div>
+        <div class="form-group">
+          <label for="cfgTelefono">Teléfono / WhatsApp de Referencia:</label>
+          <input type="text" id="cfgTelefono" placeholder="Ej. +591 70000000">
+        </div>
+        <button class="btn" style="background-color: var(--primary-dark);" onclick="guardarConfigEmpresa()">💾 Guardar Datos de Empresa</button>
+      </div>
+
+      <!-- REPORTES Y VACIADO DE BASE DE DATOS -->
+      <div class="card" style="border: 1px solid var(--danger);">
+        <h2>📊 Gestión de Datos y Reportes</h2>
+        <p style="font-size: 0.85rem; color: #555;">Exporta el registro completo de carreras a Excel o limpia la base de datos de servicios:</p>
+        
+        <button class="btn-excel" onclick="exportarCarrerasExcel()">📊 Descargar Carreras en Excel (.xlsx)</button>
+        <button class="btn-vaciar" onclick="vaciarBaseDatosCarreras()">🗑 Exportar a Excel y Vaciar Base de Datos</button>
+      </div>
+
+      <div class="card">
+        <h2>🛵 Registro / Base de Datos de Mototaxis</h2>
+        <div class="form-group">
+          <label for="regNombre">Nombre del Conductor / Móvil:</label>
+          <input type="text" id="regNombre" placeholder="Ej. Juan Pérez (Móvil 05)">
+        </div>
+        <div class="form-group">
+          <label for="regPlaca">Número de Placa:</label>
+          <input type="text" id="regPlaca" placeholder="Ej. 1234-ABC">
+        </div>
+        <div class="form-group">
+          <label for="regFoto">Foto del Conductor (Archivo):</label>
+          <input type="file" id="regFoto" accept="image/*" onchange="convertirFotoBase64(event)">
+        </div>
+        <button class="btn" style="background-color: var(--success);" onclick="registrarMototaxi()">💾 Guardar Conductor en DB</button>
+
+        <h3 style="margin-top: 1.2rem; font-size: 0.95rem;">Conductores Afiliados Registrados:</h3>
+        <div id="listaMototaxis">Cargando base de datos...</div>
+      </div>
+    </div>
+
+    <!-- VISTA PASAJERO / CLIENTE -->
+    <div id="vistaUser" style="display: none;">
+      <div class="card" style="background: #e3f2fd; border: 1px solid var(--info);">
+        <h2 style="color: var(--info); border-bottom-color: var(--info);">🙋‍♂️ Pedir MotoTaxi</h2>
+        <p style="font-size: 0.85rem; color: #444;">Tu solicitud será enviada a la Central para ser despachada:</p>
+
+        <div class="form-group">
+          <label for="userClienteNombre">Tu Nombre o Teléfono:</label>
+          <input type="text" id="userClienteNombre" placeholder="Ej. Carlos / 71234567">
+        </div>
+        <div class="form-group">
+          <label for="userClienteUbicacion">📍 Tu Dirección / Dónde te recogemos:</label>
+          <input type="text" id="userClienteUbicacion" placeholder="Ej. Frente a la plaza principal, tienda azul">
+        </div>
+        <div class="form-group">
+          <label for="userClienteDestino">🎯 Destino (Opcional):</label>
+          <input type="text" id="userClienteDestino" placeholder="Ej. Barrio Lindo / Mercado">
+        </div>
+
+        <button class="btn-audio" id="btnGrabadorUser" onclick="toggleGrabacion('user')">🎙️ Grabar Audio con Ubicación</button>
+        <audio id="audioPreviewUser" controls style="display:none;" class="audio-player"></audio>
+
+        <button class="btn" style="background-color: var(--success); font-size: 1.05rem;" onclick="lanzarCarrera('user')">🛵 Enviar Solicitud a Central</button>
+      </div>
+
+      <div class="card">
+        <h2>📌 Estado de tu Pedido</h2>
+        <div id="listaMisCarrerasUser">Cargando tus solicitudes...</div>
+      </div>
+    </div>
+
+    <!-- VISTA CENTRAL DE DESPACHO Y MONITOREO -->
+    <div id="vistaCentral" style="display: none;">
+      <div class="card">
+        <h2>📢 Convocar Carrera Directa (Desde Central)</h2>
+        <div class="form-group">
+          <label for="clienteNombre">Nombre del Cliente / Teléfono:</label>
+          <input type="text" id="clienteNombre" placeholder="Ej. Doña María (70000000)">
+        </div>
+        <div class="form-group">
+          <label for="clienteUbicacion">Dirección / Punto de Recogida:</label>
+          <input type="text" id="clienteUbicacion" placeholder="Ej. Calle Bolivar esquina Campero">
+        </div>
+        <div class="form-group">
+          <label for="clienteDestino">Destino (Opcional):</label>
+          <input type="text" id="clienteDestino" placeholder="Ej. Mercado Central">
+        </div>
+
+        <button class="btn-audio" id="btnGrabadorCentral" onclick="toggleGrabacion('central')">🎙 Grabar Nota de Voz</button>
+        <audio id="audioPreviewCentral" controls style="display:none;" class="audio-player"></audio>
+
+        <button class="btn" onclick="lanzarCarrera('central')">📡 Convocar Inmediatamente a Mototaxis</button>
+      </div>
+
+      <div class="card">
+        <h2>📋 Monitoreo de Carreras y Revisiones</h2>
+        <div id="listaCentralCarreras">Cargando pedidos...</div>
+      </div>
+
+      <div class="card">
+        <h2>📂 Historial de Carreras Concluidas</h2>
+        <div id="listaHistorialCarreras">Cargando historial...</div>
+      </div>
+    </div>
+
+    <!-- VISTA MOTOTAXI AFILIADO -->
+    <div id="vistaDriver" style="display: none;">
+      <div class="card" style="background: #e1f5fe;">
+        <div class="mototaxi-card" style="border:none; padding:0; background:none;">
+          <img id="driverFotoPerfil" src="https://via.placeholder.com/60" class="mototaxi-img" alt="Perfil">
+          <div class="mototaxi-info">
+            <h4 id="driverNombrePerfil">Conductor</h4>
+            <p><strong>Placa:</strong> <span id="driverPlacaPerfil">-</span></p>
+            <p>🟢 Conectado y Disponible</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>🔔 Carreras Convocadas por Central / En Curso</h2>
+        <div id="listaDriverCarreras">Buscando carreras convocadas...</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDgQPmuOB56p0vPEoJF4GzH-QBirP-DMIo",
+      authDomain: "mototaxi-express-31177.firebaseapp.com",
+      databaseURL: "https://mototaxi-express-31177-default-rtdb.firebaseio.com",
+      projectId: "mototaxi-express-31177",
+      storageBucket: "mototaxi-express-31177.firebasestorage.app",
+      messagingSenderId: "1019889364620",
+      appId: "1:1019889364620:web:8ad319497e0645b5af15a9"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    let rolActual = '';
+    let esAdministradorGlobal = false;
+    let modoMantenimientoActivo = false;
+    let mototaxiSesion = null;
+    let fotoBase64Temp = '';
+    let mediaRecorder;
+    let audioChunks = [];
+    let audioBase64 = '';
+    let mototaxisDB = {};
+    let carrerasDataGlobal = {};
+    let configEmpresa = {};
+
+    db.ref('empresa').on('value', snapshot => {
+      configEmpresa = snapshot.val() || {
+        nombre: "MotoTaxi Express",
+        direccion: "Dirección Central",
+        telefono: "Sin teléfono"
+      };
+      
+      document.getElementById('lblNombreEmpresaHeader').innerText = "🛵 " + configEmpresa.nombre;
+      document.getElementById('lblSubtituloHeader').innerText = `📍 ${configEmpresa.direccion} | 📞 ${configEmpresa.telefono}`;
+      document.getElementById('appTitle').innerText = configEmpresa.nombre + " - Sistema Integral";
+
+      document.getElementById('cfgNombreEmpresa').value = configEmpresa.nombre || '';
+      document.getElementById('cfgDireccion').value = configEmpresa.direccion || '';
+      document.getElementById('cfgTelefono').value = configEmpresa.telefono || '';
+    });
+
+    db.ref('mantenimiento').on('value', snapshot => {
+      modoMantenimientoActivo = snapshot.val() || false;
+      actualizarEstadoMantenimientoInterfaz();
+    });
+
+    db.ref('carreras').on('value', snapshot => {
+      carrerasDataGlobal = snapshot.val() || {};
+      if (rolActual === 'user') renderizarCarrerasUsuario();
+    });
+
+    function guardarConfigEmpresa() {
+      const nombre = document.getElementById('cfgNombreEmpresa').value.trim();
+      const direccion = document.getElementById('cfgDireccion').value.trim();
+      const telefono = document.getElementById('cfgTelefono').value.trim();
+
+      if (!nombre) {
+        alert("El nombre de la empresa es obligatorio.");
+        return;
+      }
+
+      db.ref('empresa').set({
+        nombre: nombre,
+        direccion: direccion || 'Sin dirección',
+        telefono: telefono || 'Sin teléfono'
+      }).then(() => {
+        alert("✅ Datos de la empresa actualizados correctamente.");
+      });
+    }
+
+    function actualizarEstadoMantenimientoInterfaz() {
+      const modal = document.getElementById('modalMantenimiento');
+      const btn = document.getElementById('btnToggleMantenimiento');
+
+      if (btn) {
+        btn.innerText = modoMantenimientoActivo 
+          ? "🚨 DESACTIVAR MODO MANTENIMIENTO" 
+          : "🛠 ACTIVAR MODO MANTENIMIENTO";
+        btn.style.backgroundColor = modoMantenimientoActivo ? "#e53935" : "#fbc02d";
+        btn.style.color = modoMantenimientoActivo ? "#fff" : "#333";
+      }
+
+      if (modoMantenimientoActivo && !esAdministradorGlobal) {
+        modal.style.display = 'flex';
+      } else {
+        modal.style.display = 'none';
+      }
+    }
+
+    function toggleModoMantenimiento() {
+      const nuevoEstado = !modoMantenimientoActivo;
+      db.ref('mantenimiento').set(nuevoEstado).then(() => {
+        alert(nuevoEstado ? "⚠️ Modo Mantenimiento Activado." : "✅ Modo Mantenimiento Desactivado.");
+      });
+    }
+
+    function exportarCarrerasExcel() {
+      if (Object.keys(carrerasDataGlobal).length === 0) {
+        alert("No hay carreras registradas para exportar.");
+        return false;
+      }
+
+      const listaFormateada = [];
+
+      for (let id in carrerasDataGlobal) {
+        const c = carrerasDataGlobal[id];
+        listaFormateada.push({
+          "ID Pedido": id,
+          "Cliente": c.cliente || "Anónimo",
+          "Origen / Ubicación": c.ubicacion || "-",
+          "Destino": c.destino || "Por definir",
+          "Conductor": c.chofer ? c.chofer.nombre : "Sin Asignar",
+          "Placa Mototaxi": c.chofer ? c.chofer.placa : "-",
+          "Hora Pedido": c.horaPedido || "-",
+          "Hora Finalización": c.horaFin || "-",
+          "Estado": c.estado ? c.estado.toUpperCase() : "DESCONOCIDO"
+        });
+      }
+
+      const hoja = XLSX.utils.json_to_sheet(listaFormateada);
+      const libro = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(libro, hoja, "Carreras");
+
+      const fechaActual = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(libro, `Reporte_Carreras_${fechaActual}.xlsx`);
+      return true;
+    }
+
+    function vaciarBaseDatosCarreras() {
+      if (Object.keys(carrerasDataGlobal).length === 0) {
+        alert("La base de datos de carreras ya está vacía.");
+        return;
+      }
+
+      if (confirm("⚠️ ¡ATENCIÓN! Se exportarán todas las carreras a Excel y luego SE BORRARÁN PERMANENTEMENTE de la base de datos. ¿Deseas continuar?")) {
+        const exportado = exportarCarrerasExcel();
+        if (exportado) {
+          db.ref('carreras').remove().then(() => {
+            alert("🗑️ Base de datos de carreras vaciada correctamente.");
+          });
+        }
+      }
+    }
+
+    function toggleInputNombre() {
+      const rol = document.getElementById('selectRol').value;
+      document.getElementById('groupPassAdmin').style.display = (rol === 'admin') ? 'block' : 'none';
+      document.getElementById('groupPlacaChofer').style.display = (rol === 'driver') ? 'block' : 'none';
+    }
+
+    function convertirFotoBase64(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onloadend = () => { fotoBase64Temp = reader.result; };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    db.ref('mototaxis').on('value', snapshot => {
+      mototaxisDB = snapshot.val() || {};
+      renderizarListaMototaxis();
+    });
+
+    function registrarMototaxi() {
+      const nombre = document.getElementById('regNombre').value.trim();
+      const placa = document.getElementById('regPlaca').value.trim().toUpperCase();
+
+      if (!nombre || !placa) {
+        alert("Por favor completa el nombre y la placa.");
+        return;
+      }
+
+      const key = placa.replace(/[^a-zA-Z0-9]/g, "_");
+
+      db.ref('mototaxis/' + key).set({
+        nombre: nombre,
+        placa: placa,
+        foto: fotoBase64Temp || 'https://via.placeholder.com/60'
+      }).then(() => {
+        alert("✅ Conductor registrado.");
+        document.getElementById('regNombre').value = '';
+        document.getElementById('regPlaca').value = '';
+        document.getElementById('regFoto').value = '';
+        fotoBase64Temp = '';
+      });
+    }
+
+    function renderizarListaMototaxis() {
+      const cont = document.getElementById('listaMototaxis');
+      if (!cont) return;
+      cont.innerHTML = '';
+
+      if (Object.keys(mototaxisDB).length === 0) {
+        cont.innerHTML = '<p><small>No hay conductores registrados.</small></p>';
+        return;
+      }
+
+      for (let key in mototaxisDB) {
+        const m = mototaxisDB[key];
+        cont.innerHTML += `
+          <div class="mototaxi-card">
+            <img src="${m.foto}" class="mototaxi-img" alt="${m.nombre}">
+            <div class="mototaxi-info">
+              <h4>${m.nombre}</h4>
+              <p><strong>Placa:</strong> ${m.placa}</p>
+            </div>
+            <button class="btn-cancelar" style="width: auto; padding: 0.3rem 0.6rem;" onclick="eliminarMototaxi('${key}')">🗑️</button>
+          </div>
+        `;
+      }
+    }
+
+    function eliminarMototaxi(key) {
+      if (confirm("¿Deseas eliminar este mototaxi de la base de datos?")) {
+        db.ref('mototaxis/' + key).remove();
+      }
+    }
+
+    function iniciarSesion() {
+      rolActual = document.getElementById('selectRol').value;
+
+      if (rolActual === 'admin') {
+        const pass = document.getElementById('inputPassAdmin').value;
+        if (pass !== '1234') {
+          alert("❌ Clave de Administrador incorrecta.");
+          return;
+        }
+        esAdministradorGlobal = true;
+        document.getElementById('modalPerfil').style.display = 'none';
+        document.getElementById('lblRol').innerText = '⚙ ADMIN GENERAL';
+        document.getElementById('panelNavegacionAdmin').style.display = 'block';
+        
+        cambiarVista('admin');
+        escucharCarrerasCentral();
+      } 
+      else if (rolActual === 'user') {
+        document.getElementById('modalPerfil').style.display = 'none';
+        document.getElementById('lblRol').innerText = '👤 PASAJERO';
+        cambiarVista('user');
+        renderizarCarrerasUsuario();
+      }
+      else if (rolActual === 'central') {
+        document.getElementById('modalPerfil').style.display = 'none';
+        document.getElementById('lblRol').innerText = '🏢 CENTRAL';
+        cambiarVista('central');
+        escucharCarrerasCentral();
+      } 
+      else {
+        const placaIngresada = document.getElementById('inputPlacaChofer').value.trim().toUpperCase();
+        let encontrado = null;
+
+        for (let k in mototaxisDB) {
+          if (mototaxisDB[k].placa === placaIngresada) {
+            encontrado = mototaxisDB[k];
+            break;
+          }
+        }
+
+        if (!encontrado) {
+          alert("❌ La placa ingresada no figura en la Base de Datos.");
+          return;
+        }
+
+        mototaxiSesion = encontrado;
+        document.getElementById('modalPerfil').style.display = 'none';
+        document.getElementById('lblRol').innerText = `🛵 ${mototaxiSesion.placa}`;
+        
+        document.getElementById('driverFotoPerfil').src = mototaxiSesion.foto;
+        document.getElementById('driverNombrePerfil').innerText = mototaxiSesion.nombre;
+        document.getElementById('driverPlacaPerfil').innerText = mototaxiSesion.placa;
+
+        cambiarVista('driver');
+        escucharCarrerasDriver();
+      }
+
+      actualizarEstadoMantenimientoInterfaz();
+    }
+
+    function cambiarVista(vista) {
+      document.getElementById('vistaAdminModule').style.display = (vista === 'admin') ? 'block' : 'none';
+      document.getElementById('vistaUser').style.display = (vista === 'user') ? 'block' : 'none';
+      document.getElementById('vistaCentral').style.display = (vista === 'central') ? 'block' : 'none';
+      document.getElementById('vistaDriver').style.display = (vista === 'driver') ? 'block' : 'none';
+
+      if (vista === 'user') renderizarCarrerasUsuario();
+      if (vista === 'driver' && !mototaxiSesion) {
+        mototaxiSesion = { nombre: "Prueba Admin", placa: "ADMIN-01", foto: "https://via.placeholder.com/60" };
+        document.getElementById('driverFotoPerfil').src = mototaxiSesion.foto;
+        document.getElementById('driverNombrePerfil').innerText = mototaxiSesion.nombre;
+        document.getElementById('driverPlacaPerfil').innerText = mototaxiSesion.placa;
+        escucharCarrerasDriver();
+      }
+    }
+
+    async function toggleGrabacion(origen) {
+      const btn = document.getElementById(origen === 'user' ? 'btnGrabadorUser' : 'btnGrabadorCentral');
+      if (mediaRecorder && mediaRecorder.state === "recording") {
+        mediaRecorder.stop();
+        btn.innerText = "🎙️ Grabar Audio";
+        btn.style.background = "#0288d1";
+      } else {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          mediaRecorder = new MediaRecorder(stream);
+          audioChunks = [];
+
+          mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+          mediaRecorder.onstop = async () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            const reader = new FileReader();
+            reader.readAsDataURL(audioBlob);
+            reader.onloadend = () => {
+              audioBase64 = reader.result;
+              const player = document.getElementById(origen === 'user' ? 'audioPreviewUser' : 'audioPreviewCentral');
+              player.src = audioBase64;
+              player.style.display = 'block';
+            };
+          };
+
+          mediaRecorder.start();
+          btn.innerText = "🛑 Detener Grabación...";
+          btn.style.background = "#d32f2f";
+        } catch (err) {
+          alert("Error al acceder al micrófono: " + err.message);
+        }
+      }
+    }
+
+    // LANZAR CARRERA
+    function lanzarCarrera(origen) {
+      let cliente, ubicacion, destino;
+
+      if (origen === 'user') {
+        cliente = document.getElementById('userClienteNombre').value.trim();
+        ubicacion = document.getElementById('userClienteUbicacion').value.trim();
+        destino = document.getElementById('userClienteDestino').value.trim();
+      } else {
+        cliente = document.getElementById('clienteNombre').value.trim();
+        ubicacion = document.getElementById('clienteUbicacion').value.trim();
+        destino = document.getElementById('clienteDestino').value.trim();
+      }
+
+      if (!ubicacion && !audioBase64) {
+        alert("Ingresa tu dirección o graba una nota de voz con tu ubicación.");
+        return;
+      }
+
+      // Si viene de usuario entra a 'pendiente_central', si la lanza central directamente pasa a 'pendiente'
+      const estadoInicial = (origen === 'user') ? 'pendiente_central' : 'pendiente';
+
+      const nuevaCarrera = {
+        cliente: cliente || 'Pasajero Web',
+        ubicacion: ubicacion || 'Ubicación en audio',
+        destino: destino || 'Por definir',
+        audio: audioBase64 || null,
+        estado: estadoInicial,
+        chofer: null,
+        horaPedido: new Date().toLocaleTimeString(),
+        horaFin: null
+      };
+
+      db.ref('carreras').push(nuevaCarrera).then(() => {
+        if (origen === 'user') {
+          alert("📡 Solicitud enviada a la Central. Un operador convocará tu mototaxi en breve.");
+          document.getElementById('userClienteNombre').value = '';
+          document.getElementById('userClienteUbicacion').value = '';
+          document.getElementById('userClienteDestino').value = '';
+          document.getElementById('audioPreviewUser').style.display = 'none';
+        } else {
+          alert("🎉 Carrera convocada a los mototaxis correctamente.");
+          document.getElementById('clienteNombre').value = '';
+          document.getElementById('clienteUbicacion').value = '';
+          document.getElementById('clienteDestino').value = '';
+          document.getElementById('audioPreviewCentral').style.display = 'none';
+        }
+        audioBase64 = '';
+      });
+    }
+
+    // FUNCIÓN DE CENTRAL PARA CONVOCAR PEDIDO DE USUARIO
+    function convocarCarreraCentral(id) {
+      db.ref('carreras/' + id).update({
+        estado: 'pendiente'
+      }).then(() => {
+        alert("📡 Pedido convocado. Ahora está visible para los mototaxis.");
+      });
+    }
+
+    function posponerCarreraUsuario(id) {
+      const minutos = prompt("¿Cuántos minutos deseas posponer la carrera? (Ej: 10, 15, 20):", "10");
+      if (minutos && !isNaN(minutos)) {
+        db.ref('carreras/' + id).update({
+          estado: 'pospuesta',
+          horaPedido: new Date().toLocaleTimeString() + ` (Pospuesta +${minutos} min)`
+        }).then(() => {
+          alert(`⏳ Tu carrera fue pospuesta ${minutos} minutos.`);
+        });
+      }
+    }
+
+    function cancelarCarreraUsuario(id) {
+      if (confirm("¿Estás seguro de cancelar esta solicitud de MotoTaxi?")) {
+        db.ref('carreras/' + id).update({
+          estado: 'cancelada',
+          horaFin: new Date().toLocaleTimeString()
+        }).then(() => {
+          alert("❌ Tu solicitud ha sido cancelada.");
+        });
+      }
+    }
+
+    // RENDERIZAR VISTA PASAJERO
+    function renderizarCarrerasUsuario() {
+      const cont = document.getElementById('listaMisCarrerasUser');
+      if (!cont) return;
+      cont.innerHTML = '';
+
+      if (Object.keys(carrerasDataGlobal).length === 0) {
+        cont.innerHTML = '<p><small>No hay solicitudes activas.</small></p>';
+        return;
+      }
+
+      for (let id in carrerasDataGlobal) {
+        const item = carrerasDataGlobal[id];
+        
+        let choferHTML = '';
+        if (item.chofer) {
+          choferHTML = `
+            <div class="chofer-asociado">
+              <img src="${item.chofer.foto}" alt="${item.chofer.nombre}">
+              <div>
+                <strong>${item.chofer.nombre}</strong><br>
+                <small>Placa: ${item.chofer.placa}</small>
+              </div>
+            </div>
+          `;
+        }
+
+        const puedeModificar = (item.estado === 'pendiente_central' || item.estado === 'pendiente' || item.estado === 'tomada' || item.estado === 'pospuesta');
+
+        cont.innerHTML += `
+          <div class="item-carrera ${
+            item.estado === 'pendiente_central' ? 'revision' :
+            item.estado === 'tomada' ? 'asignada' :
+            item.estado === 'pospuesta' ? 'pospuesta' :
+            item.estado === 'completada' ? 'completada' :
+            item.estado === 'cancelada' ? 'cancelada' : ''
+          }">
+            <h3>📍 ${item.ubicacion}</h3>
+            <p><strong>Pasajero:</strong> ${item.cliente} (${item.horaPedido})</p>
+            <p><strong>Destino:</strong> ${item.destino}</p>
+            <p><strong>Estado:</strong> ${
+              item.estado === 'pendiente_central' ? '🟡 En revisión por la Central...' :
+              item.estado === 'pendiente' ? '📡 Convocado (Buscando Mototaxi...)' :
+              item.estado === 'tomada' ? '🛵 ¡Móvil en camino!' :
+              item.estado === 'pospuesta' ? '⏳ Carrera pospuesta' :
+              item.estado === 'completada' ? '✅ Viaje Concluido' : '❌ Cancelado'
+            }</p>
+            ${choferHTML}
+            ${puedeModificar ? `
+              <div class="acciones-grid" style="margin-top:0.6rem;">
+                <button class="btn-posponer" onclick="posponerCarreraUsuario('${id}')">⏳ Posponer Pedido</button>
+                <button class="btn-cancelar" onclick="cancelarCarreraUsuario('${id}')">❌ Cancelar Pedido</button>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+    }
+
+    // MONITOREO CENTRAL
+    function escucharCarrerasCentral() {
+      db.ref('carreras').on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const contActivas = document.getElementById('listaCentralCarreras');
+        const contHistorial = document.getElementById('listaHistorialCarreras');
+        
+        contActivas.innerHTML = '';
+        contHistorial.innerHTML = '';
+
+        for (let id in data) {
+          const item = data[id];
+          let choferHTML = '';
+          if (item.chofer) {
+            choferHTML = `
+              <div class="chofer-asociado">
+                <img src="${item.chofer.foto}" alt="${item.chofer.nombre}">
+                <div>
+                  <strong>${item.chofer.nombre}</strong><br>
+                  <small>Placa: ${item.chofer.placa}</small>
+                </div>
+              </div>
+            `;
+          }
+
+          if (item.estado === 'pendiente_central' || item.estado === 'pendiente' || item.estado === 'tomada' || item.estado === 'pospuesta') {
+            contActivas.innerHTML += `
+              <div class="item-carrera ${
+                item.estado === 'pendiente_central' ? 'revision' :
+                item.estado === 'tomada' ? 'asignada' : 
+                (item.estado === 'pospuesta' ? 'pospuesta' : '')
+              }">
+                <h3>📍 ${item.ubicacion}</h3>
+                <p><strong>Cliente:</strong> ${item.cliente} (${item.horaPedido})</p>
+                <p><strong>Destino:</strong> ${item.destino}</p>
+                ${item.audio ? `<audio src="${item.audio}" controls class="audio-player"></audio>` : ''}
+                <p><strong>Estado:</strong> ${
+                  item.estado === 'pendiente_central' ? '🟡 Esperando que Central Convoque' :
+                  item.estado === 'pendiente' ? '📡 Convocado (Esperando Conductor)' : 
+                  item.estado === 'pospuesta' ? '⏳ Pospuesta por Pasajero' : '🛵 En curso'
+                }</p>
+                ${choferHTML}
+                <div class="acciones-grid" style="margin-top:0.5rem;">
+                  ${item.estado === 'pendiente_central' ? `<button class="btn-convocar" onclick="convocarCarreraCentral('${id}')">📡 Convocar a Mototaxis</button>` : ''}
+                  ${item.estado === 'tomada' ? `<button class="btn-completar" onclick="marcarCompletada('${id}')">✅ Completada</button>` : ''}
+                  <button class="btn-cancelar" onclick="cancelarCarrera('${id}')">❌ Cancelar</button>
+                </div>
+              </div>
+            `;
+          } else {
+            contHistorial.innerHTML += `
+              <div class="item-carrera ${item.estado === 'completada' ? 'completada' : 'cancelada'}">
+                <h3>📍 ${item.ubicacion}</h3>
+                <p><strong>Cliente:</strong> ${item.cliente} (${item.horaPedido})</p>
+                <p><strong>Estado Final:</strong> ${item.estado === 'completada' ? '✅ Cumplida' : '❌ Cancelada'}</p>
+                ${choferHTML}
+                <p><small>Finalizada: ${item.horaFin || '-'}</small></p>
+              </div>
+            `;
+          }
+        }
+      });
+    }
+
+    // MONITOREO MOTOTAXI
+    function escucharCarrerasDriver() {
+      db.ref('carreras').on('value', snapshot => {
+        const data = snapshot.val() || {};
+        const cont = document.getElementById('listaDriverCarreras');
+        cont.innerHTML = '';
+
+        for (let id in data) {
+          const item = data[id];
+          const esMiCarrera = item.chofer && mototaxiSesion && item.chofer.placa === mototaxiSesion.placa;
+
+          // Solo ven carreras convocadas ('pendiente'), pospuestas o sus propias carreras tomadas
+          if (item.estado === 'pendiente' || item.estado === 'pospuesta' || (item.estado === 'tomada' && esMiCarrera)) {
+            cont.innerHTML += `
+              <div class="item-carrera ${esMiCarrera ? 'asignada' : (item.estado === 'pospuesta' ? 'pospuesta' : '')}">
+                <h3>📍 ${item.ubicacion}</h3>
+                <p><strong>Cliente:</strong> ${item.cliente} (${item.horaPedido})</p>
+                <p><strong>Destino:</strong> ${item.destino}</p>
+                ${item.audio ? `<audio src="${item.audio}" controls class="audio-player"></audio>` : ''}
+                
+                ${(item.estado === 'pendiente' || item.estado === 'pospuesta') ? 
+                  `<button class="btn-aceptar" onclick="tomarCarrera('${id}')">🙋‍♂️ ¡Tomar esta Carrera!</button>` : 
+                  `<div>
+                    <p><strong>🟢 ¡Carrera asignada a ti!</strong></p>
+                    <button class="btn-completar" onclick="marcarCompletada('${id}')">🏁 Finalizar Servicio</button>
+                   </div>`
+                }
+              </div>
+            `;
+          }
+        }
+      });
+    }
+
+    function tomarCarrera(id) {
+      const ref = db.ref('carreras/' + id);
+      ref.transaction(currentData => {
+        if (currentData && (currentData.estado === 'pendiente' || currentData.estado === 'pospuesta')) {
+          currentData.estado = 'tomada';
+          currentData.chofer = mototaxiSesion;
+          return currentData;
+        } else {
+          return;
+        }
+      }, (error, committed) => {
+        if (committed) {
+          alert("🎉 ¡Carrera tomada! Dirígete a la ubicación.");
+        } else {
+          alert("❌ Otro mototaxi tomó la carrera un instante antes.");
+        }
+      });
+    }
+
+    function marcarCompletada(id) {
+      if (confirm("¿Confirmas que el viaje finalizó con éxito?")) {
+        db.ref('carreras/' + id).update({
+          estado: 'completada',
+          horaFin: new Date().toLocaleTimeString()
+        });
+      }
+    }
+
+    function cancelarCarrera(id) {
+      if (confirm("¿Deseas cancelar esta carrera?")) {
+        db.ref('carreras/' + id).update({
+          estado: 'cancelada',
+          horaFin: new Date().toLocaleTimeString()
+        });
+      }
+    }
+  </script>
+</body>
+</html>
