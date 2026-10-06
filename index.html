@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title id="appTitle">MotoTaxi Express - Sistema Integral</title>
 
-  <!-- CONFIGURACIÓN PWA PARA GENERAR APK -->
+  <!-- CONFIGURACIÓN PWA PARA GENERAR APK E INSTALACIÓN -->
   <link rel="manifest" href="data:application/manifest+json;utf8,{%22short_name%22:%22MotoTaxi%22,%22name%22:%22MotoTaxi%20Express%22,%22description%22:%22Sistema%20Integral%20de%20MotoTaxi%20y%20Despacho%22,%22icons%22:[{%22src%22:%22https://cdn-icons-png.flaticon.com/512/171/171255.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22,%22purpose%22:%22any%20maskable%22}],%22start_url%22:%22.%22,%22background_color%22:%22%23f57c00%22,%22theme_color%22:%22%23f57c00%22,%22display%22:%22standalone%22}">
   <meta name="theme-color" content="#f57c00">
   <meta name="mobile-web-app-capable" content="yes">
@@ -314,6 +314,15 @@
 </head>
 <body>
 
+  <!-- MODAL DE ALERTA PERSONALIZADA (REEMPLAZA A ALERT() NATIVO CON DOMINIO) -->
+  <div id="modalAlertaPersonalizada" class="modal-overlay" style="display: none; z-index: 9999;">
+    <div class="modal-box">
+      <h3 id="tituloAlerta" style="margin-top: 0; color: #f57c00;">🛵 Moto Taxi</h3>
+      <p id="mensajeAlerta" style="margin: 1rem 0; font-size: 0.95rem; color: #333;"></p>
+      <button class="btn" style="width: auto; padding: 0.5rem 1.5rem;" onclick="cerrarAlerta()">Aceptar</button>
+    </div>
+  </div>
+
   <!-- MODAL DE MANTENIMIENTO GLOBAL -->
   <div id="modalMantenimiento" class="modal-overlay" style="display: none;">
     <div class="modal-box">
@@ -428,7 +437,7 @@
     <!-- VISTA PASAJERO / CLIENTE -->
     <div id="vistaUser" style="display: none;">
       <div class="card" style="background: #e3f2fd; border: 1px solid var(--info);">
-        <h2 style="color: var(--info); border-bottom-color: var(--info);">🙋‍♂️ Pedir MotoTaxi</h2>
+        <h2 style="color: var(--info); border-bottom-color: var(--info);">🙋‍♂️️ Pedir MotoTaxi</h2>
         <p style="font-size: 0.85rem; color: #444;">Tu solicitud será enviada a la Central para ser despachada:</p>
 
         <div class="form-group">
@@ -512,6 +521,16 @@
   </div>
 
   <script>
+    // SOBRESCRIBIR LA FUNCIÓN NATIVA ALERT()
+    window.alert = function(mensaje) {
+      document.getElementById('mensajeAlerta').innerText = mensaje;
+      document.getElementById('modalAlertaPersonalizada').style.display = 'flex';
+    };
+
+    function cerrarAlerta() {
+      document.getElementById('modalAlertaPersonalizada').style.display = 'none';
+    }
+
     const firebaseConfig = {
       apiKey: "AIzaSyDgQPmuOB56p0vPEoJF4GzH-QBirP-DMIo",
       authDomain: "mototaxi-express-31177.firebaseapp.com",
@@ -648,7 +667,7 @@
         return;
       }
 
-      if (confirm("⚠️️ ¡ATENCIÓN! Se exportarán todas las carreras a Excel y luego SE BORRARÁN PERMANENTEMENTE de la base de datos. ¿Deseas continuar?")) {
+      if (confirm("⚠ ¡ATENCIÓN! Se exportarán todas las carreras a Excel y luego SE BORRARÁN PERMANENTEMENTE de la base de datos. ¿Deseas continuar?")) {
         const exportado = exportarCarrerasExcel();
         if (exportado) {
           db.ref('carreras').remove().then(() => {
@@ -813,7 +832,7 @@
       const btn = document.getElementById(origen === 'user' ? 'btnGrabadorUser' : 'btnGrabadorCentral');
       if (mediaRecorder && mediaRecorder.state === "recording") {
         mediaRecorder.stop();
-        btn.innerText = "🎙️️ Grabar Audio";
+        btn.innerText = "🎙 Grabar Audio";
         btn.style.background = "#0288d1";
       } else {
         try {
